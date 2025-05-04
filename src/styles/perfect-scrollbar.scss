@@ -2,7 +2,7 @@
  * Container style
  */
 
-@import "./variables";
+@use "./variables";
 .ps {
   overflow: hidden !important;
   overflow-anchor: none;
@@ -65,7 +65,7 @@
  * Scrollbar thumb styles
  */
 .ps__thumb-x {
-  background: $elem-gradient-1-vertical;
+  background: variables.$elem-gradient-1-vertical;
   border-radius: 6px;
   transition: background-color .2s linear, height .2s ease-in-out;
   -webkit-transition: background-color .2s linear, height .2s ease-in-out;
@@ -77,7 +77,7 @@
 }
 
 .ps__thumb-y {
-  background: $elem-gradient-1-vertical;
+  background: variables.$elem-gradient-1-vertical;
   border-radius: 6px;
   transition: background-color .2s linear, width .2s ease-in-out;
   -webkit-transition: background-color .2s linear, width .2s ease-in-out;
@@ -116,5 +116,3 @@
   position: relative;
   //height: 100%;
 }
-
-/*# sourceMappingURL=styles.css.map*/

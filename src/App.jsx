@@ -12,15 +12,15 @@ import './styles/perfect-scrollbar.scss'
 
 import translationsFallback from './assets/files/translations.json'
 
-import Menu from './components/UI/Menu'
-import Home from './components/Home'
-import About from './components/About'
-import Multimedia from './components/Multimedia'
-import Contact from './components/Contact'
-import Error404 from './components/UI/404'
-import Loader from './components/UX/Loader'
-import MusicPopup from './components/UI/MusicPopup/MusicPopup'
-import BioPopup from './components/UI/BioPopup'
+import Menu from './components/UI/Menu.jsx'
+import Home from './components/Home.jsx'
+import About from './components/About.jsx'
+import Multimedia from './components/Multimedia.jsx'
+import Contact from './components/Contact.jsx'
+import Error404 from './components/UI/404.jsx'
+import Loader from './components/UX/Loader.jsx'
+import MusicPopup from './components/UI/MusicPopup/MusicPopup.jsx'
+import BioPopup from './components/UI/BioPopup.jsx'
 
 const usePathname = () => {
     const location = useLocation()

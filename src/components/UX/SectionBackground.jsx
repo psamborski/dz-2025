@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default () => {
+const SectionBackground = () => {
   return (
     <div className='section-background'>
       <svg
@@ -127,3 +127,5 @@ export default () => {
     </div>
   )
 }
+
+export default SectionBackground

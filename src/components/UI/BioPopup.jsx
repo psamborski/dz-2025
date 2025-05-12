@@ -8,31 +8,31 @@ export default function BioPopup({
                                    language
                                  }) {
   return (
-      <section
-          id='bio-popup'
-          className={isBioPopupShown ? '' : 'popup-hidden'}
-          onClick={event => {
-            if (event.target.id === 'bio-popup') {
-              hideBioPopup()
-            }
-          }}
-      >
-        <div className='popup-container'>
-          <div
-              className='close-popup'
-              onClick={hideBioPopup}
-          >
-            <span className='fas fa-times' />
-          </div>
-
-          <h3>{translations[language].cv_title}</h3>
-
-          <div
-              className='popup-content'
-              dangerouslySetInnerHTML={{ __html: translations[language].cv_content }}
-          />
+    <section
+      id='bio-popup'
+      className={isBioPopupShown ? '' : 'popup-hidden'}
+      onClick={event => {
+        if (event.target.id === 'bio-popup') {
+          hideBioPopup()
+        }
+      }}
+    >
+      <div className='popup-container'>
+        <div
+          className='close-popup'
+          onClick={hideBioPopup}
+        >
+          <span className='fas fa-times'/>
         </div>
-      </section>
+
+        <h3>{translations[language].cv_title}</h3>
+
+        <div
+          className='popup-content'
+          dangerouslySetInnerHTML={{__html: translations[language].cv_content}}
+        />
+      </div>
+    </section>
   )
 }
 

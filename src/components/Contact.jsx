@@ -5,9 +5,12 @@ import {Parallax} from 'react-scroll-parallax'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import clsx from 'clsx'
 import SectionBackground from './UX/SectionBackground'
+import useScrollSpy from "../hooks/useScrollSpy.jsx";
 
 export default function Contact({translations, language}) {
   const t = translations?.[language] || {}
+
+  const sectionRef = useScrollSpy('kontakt', '/kontakt');
 
   const instaLinks = useMemo(() => (t.socialmedia_instagram_link || '').split(';'), [t.socialmedia_instagram_link])
   const instaTrans = useMemo(() => (t.socialmedia_instagram_title || '').split(';'), [t.socialmedia_instagram_title])
@@ -16,7 +19,7 @@ export default function Contact({translations, language}) {
 
   return (
     <Element name="kontakt">
-      <section id="kontakt">
+      <section id="kontakt" ref={sectionRef}>
         <h2 className="mobile-title">{t.socialmedia_title}</h2>
 
         <div className={'parallax-outer left-side photo'}>

@@ -14,27 +14,30 @@ import Image4 from '../assets/gallery/4.jpg'
 import Image5 from '../assets/gallery/5.jpg'
 import Image6 from '../assets/gallery/6.jpg'
 import Image7 from '../assets/gallery/7.jpg'
+import useScrollSpy from "../hooks/useScrollSpy.jsx";
 
 const Multimedia = ({translations, language}) => {
   const [bgImage, setBgImage] = useState(Image5)
 
+  const sectionRef = useScrollSpy('multimedia', '/multimedia');
+
   return (
     <Element name="multimedia" meta={{title: 'Dariusz Zimnicki | Multimedia'}}>
-      <section id="multimedia">
+      <section id="multimedia" ref={sectionRef}>
         <h2 className="mobile-title">{translations[language].multimedia_title}</h2>
 
-       <div className={'parallax-outer right-side photo'}>
-        <Parallax
-          className='parallax-inner'
-          translateY={[-25, 25]}
-          style={{ height: '100%' }}
-        >
-          <CrossfadeImage
-            src={bgImage}
-            containerClass='photo-container'
-          />
-        </Parallax>
-      </div>
+        <div className={'parallax-outer right-side photo'}>
+          <Parallax
+            className='parallax-inner'
+            translateY={[-25, 25]}
+            style={{height: '100%'}}
+          >
+            <CrossfadeImage
+              src={bgImage}
+              containerClass='photo-container'
+            />
+          </Parallax>
+        </div>
 
         <div className="left-side text">
           <SectionBackground/>

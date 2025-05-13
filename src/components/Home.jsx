@@ -6,12 +6,15 @@ import clsx from 'clsx'
 
 import '../styles/perfect-scrollbar.scss'
 import SectionBackground from './UX/SectionBackground'
+import useScrollSpy from "../hooks/useScrollSpy.jsx";
 
 export default function Home({translations, language, showBioPopup}) {
   const t = translations?.[language] || {}
 
+  const sectionRef = useScrollSpy('home', '/');
+
   return (
-    <section id="home">
+    <section id="home" ref={sectionRef}>
       <div className="right-side photo">
         <h1 className="mobile-title">{t.hero_title}</h1>
 

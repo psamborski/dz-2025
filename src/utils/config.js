@@ -1,0 +1,4 @@
+export const CONFIG = {
+  CONTENTFUL_CONSUME_API_KEY: '9K7-bwN9KuBPl1RteguPYdasLND8ZmkRXWc0kHFhpkU',
+  CONTENTFUL_SPACE_ID: '9pbpdw50ae5i',
+}

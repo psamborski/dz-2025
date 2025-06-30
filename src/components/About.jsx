@@ -1,34 +1,57 @@
-import React, {useCallback, useState} from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import {Element} from 'react-scroll';
-import {Parallax} from 'react-scroll-parallax';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import SectionBackground from './UX/SectionBackground';
-import useScrollSpy from "../hooks/useScrollSpy.jsx";
+import React, {useCallback, useEffect, useState} from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import {Element} from 'react-scroll'
+import {Parallax} from 'react-scroll-parallax'
+import {documentToReactComponents} from '@contentful/rich-text-react-renderer'
+
+import PerfectScrollbar from 'react-perfect-scrollbar'
+import SectionBackground from './UX/SectionBackground'
+import useScrollSpy from '../hooks/useScrollSpy.jsx'
 
 
-const About = ({translations, language}) => {
+const About = ({appData, language}) => {
   const [activeTab, setActiveTab] = useState('achievements');
-  const t = translations[language];
+  const [t, setT] = useState(null)
+  const [tabs, setTabs] = useState([])
 
   const sectionRef = useScrollSpy('zyciorys', '/zyciorys');
 
   const handleSwitchTab = useCallback((tab) => setActiveTab(tab), []);
   const handleKeyUp = useCallback((event, tab) => {
     if (event.key === 'Enter') setActiveTab(tab);
-  }, []);
+  }, [])
 
-  const tabs = [
-    {key: 'achievements', title: t.resume_section_achievements_title, content: t.resume_section_achievements_content},
-    {key: 'choirs', title: t.resume_section_choirs_title, content: t.resume_section_choirs_content},
-    {key: 'compositions', title: t?.resume_section_compositions_title, content: t?.resume_section_compositions_content}
-  ];
+  useEffect(() => {
+    setT(appData?.[`${language}Bio`]?.items?.[0])
+  }, [appData, language])
+
+  useEffect(() => {
+    console.log(!!t, t)
+    if (t) {
+      setTabs([
+        {
+          key: 'achievements',
+          title: t?.achievementsTitle,
+          content: documentToReactComponents(t?.achievementsContent?.json || {})
+        },
+        {
+          key: 'choirs',
+          title: t?.choirsTitle,
+          content: documentToReactComponents(t?.choirsContent?.json || {})},
+        {
+          key: 'compositions',
+          title: t?.composistionsTitle,
+          content: documentToReactComponents(t?.composistionsContent?.json || {})
+        }
+      ])
+    }
+  }, [t])
 
   return (
     <Element name="zyciorys">
       <section id="zyciorys" ref={sectionRef}>
-        <h2 className="mobile-title">{t.resume_title}</h2>
+        <h2 className="mobile-title">{t?.bioTitle}</h2>
 
         <div className="parallax-outer left-side photo">
           <Parallax className="parallax-inner" translateY={[-25, 25]} style={{height: '100%'}}>
@@ -38,7 +61,7 @@ const About = ({translations, language}) => {
 
         <div className="right-side text">
           <SectionBackground/>
-          <h2>{t.resume_title}</h2>
+          <h2>{t?.bioTitle}</h2>
 
           <div className="about-switch-container">
             {tabs.map(({key, title}) => (
@@ -61,7 +84,9 @@ const About = ({translations, language}) => {
                 className={clsx('about-box', {active: activeTab === key, hidden: activeTab !== key})}
               >
                 <PerfectScrollbar>
-                  <p dangerouslySetInnerHTML={{__html: content}}/>
+                  <div>
+                    {content}
+                  </div>
                 </PerfectScrollbar>
               </div>
             ))}
@@ -73,7 +98,7 @@ const About = ({translations, language}) => {
 };
 
 About.propTypes = {
-  translations: PropTypes.object.isRequired,
+  appData: PropTypes.object.isRequired,
   language: PropTypes.string.isRequired
 };
 

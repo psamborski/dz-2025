@@ -9,8 +9,6 @@ import './components/UI/UI.scss'
 import './components/UX/UX.scss'
 import './styles/perfect-scrollbar.scss'
 
-import translationsFallback from './assets/files/translations.json'
-
 import Menu from './components/UI/Menu.jsx'
 import Home from './components/Home.jsx'
 import About from './components/About.jsx'
@@ -21,6 +19,7 @@ import Loader from './components/UX/Loader.jsx'
 import MusicPopup from './components/UI/MusicPopup/MusicPopup.jsx'
 import BioPopup from './components/UI/BioPopup.jsx'
 import {AxiosProvider} from "./api/AxiosProvider.jsx"
+import {useAppData} from "./api/hooks/useAppData.jsx"
 import {ErrorBoundary} from "./components/Helpers/ErrorBoundary.jsx";
 
 const usePathname = () => {
@@ -28,46 +27,54 @@ const usePathname = () => {
   return location.pathname
 }
 
-const AppContent = ({translations, language, showBioPopup}) => (
+const AppContent = ({appData, language, showBioPopup}) => (
   <>
-    <Home translations={translations} language={language} showBioPopup={showBioPopup}/>
-    <About translations={translations} language={language}/>
-    <Multimedia translations={translations} language={language}/>
-    <Contact translations={translations} language={language}/>
+    <Home
+      appData={appData}
+      language={language}
+      showBioPopup={showBioPopup}
+    />
+    <About
+      appData={appData}
+      language={language}
+    />
+    {/*<Multimedia*/}
+    {/*  texts={*/}
+    {/*    {*/}
+    {/*      pl: appData?.[language + 'About'],*/}
+    {/*      en: appData?.[language + 'About']*/}
+    {/*    }*/}
+    {/*  }      language={language}*/}
+    {/*/>*/}
+    <Contact contactData={appData} language={language}/>
   </>
 )
 
 const App = () => {
   const pathname = usePathname()
-  console.log(pathname)
+  const {getAppData} = useAppData()
 
-  const [loading, setLoading] = useState(true)
+  const [appData, setAppData] = useState(null)
   const [timeoutLoading, setTimeoutLoading] = useState(true)
-  const [translations, setTranslations] = useState({pl: {}, en: {}})
   const [language, setLanguage] = useState('pl')
   const [isMusicPopupShown, setMusicPopupShown] = useState(pathname.endsWith('nuty'))
   const [isBioPopupShown, setBioPopupShown] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => setTimeoutLoading(false), 2500)
+    getAppData()
+      .then(resp => {
+        setAppData(
+          resp.data?.data || {},
+        )
+      })
+      .catch(e => {
+        console.error(e)
+        throw new Error('Invalid call')
+      })
+  }, [getAppData])
 
-    const fetchTranslations = async () => {
-      try {
-        const response = await axios.get('http://cms.dariuszzimnicki.com/getTranslations', {
-          headers: {
-            Authorization: '$2y$12$u/OLECVbrHmop.a2uup5/.Fc4sPHSOgJlLz0NlE19z7s.UxSbsmWK'
-          }
-        })
-        setTranslations(response.data)
-      } catch (error) {
-        console.error(error)
-        setTranslations(translationsFallback)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchTranslations()
+  useEffect(() => {
+    const timer = setTimeout(() => setTimeoutLoading(false), 2000)
 
     return () => clearTimeout(timer)
   }, [])
@@ -87,13 +94,14 @@ const App = () => {
         toggleMusicPopup={() => setMusicPopupShown(!isMusicPopupShown)}
       />
 
-      <Loader show={loading || timeoutLoading}/>
+      <Loader show={timeoutLoading}/>
 
       <ErrorBoundary>
-        translations={translations}
-        language={language}
-        showBioPopup={() => setBioPopupShown(true)}
-      />
+        <AppContent
+          appData={appData}
+          language={language}
+          showBioPopup={() => setBioPopupShown(true)}
+        />
       </ErrorBoundary>
 
       <MusicPopup
@@ -103,10 +111,10 @@ const App = () => {
       />
 
       <BioPopup
+        appData={appData}
         isBioPopupShown={isBioPopupShown}
         hideBioPopup={() => setBioPopupShown(false)}
         language={language}
-        translations={translations}
       />
     </ParallaxProvider>
   )

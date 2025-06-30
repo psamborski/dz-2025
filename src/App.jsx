@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react'
-import axios from 'axios'
 import {ParallaxProvider} from 'react-scroll-parallax'
 import {BrowserRouter as Router, Navigate, Route, Routes, useLocation} from 'react-router-dom'
 
@@ -21,6 +20,8 @@ import Error404 from './components/UI/404.jsx'
 import Loader from './components/UX/Loader.jsx'
 import MusicPopup from './components/UI/MusicPopup/MusicPopup.jsx'
 import BioPopup from './components/UI/BioPopup.jsx'
+import {AxiosProvider} from "./api/AxiosProvider.jsx"
+import {ErrorBoundary} from "./components/Helpers/ErrorBoundary.jsx";
 
 const usePathname = () => {
   const location = useLocation()
@@ -113,16 +114,18 @@ const App = () => {
 
 const AppWrapper = () => (
   <ParallaxProvider>
-    <Router>
-      <Routes>
-        <Route path="/" element={<App/>}/>
-        <Route path="/zyciorys" element={<App/>}/>
-        <Route path="/multimedia" element={<App/>}/>
-        <Route path="/kontakt" element={<App/>}/>
-        <Route path="/nuty" element={<Navigate to="/" replace/>}/>
-        <Route path="*" element={<Error404/>}/>
-      </Routes>
-    </Router>
+    <AxiosProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<App/>}/>
+          <Route path="/zyciorys" element={<App/>}/>
+          <Route path="/multimedia" element={<App/>}/>
+          <Route path="/kontakt" element={<App/>}/>
+          <Route path="/nuty" element={<Navigate to="/" replace/>}/>
+          <Route path="*" element={<Error404/>}/>
+        </Routes>
+      </Router>
+    </AxiosProvider>
   </ParallaxProvider>
 
 )

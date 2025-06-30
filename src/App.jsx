@@ -88,11 +88,12 @@ const App = () => {
 
       <Loader show={loading || timeoutLoading}/>
 
-      <AppContent
+      <ErrorBoundary>
         translations={translations}
         language={language}
         showBioPopup={() => setBioPopupShown(true)}
       />
+      </ErrorBoundary>
 
       <MusicPopup
         isShowMusicPopupShown={isMusicPopupShown}

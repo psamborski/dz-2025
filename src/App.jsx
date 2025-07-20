@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import {ParallaxProvider} from 'react-scroll-parallax'
-import {BrowserRouter as Router, Navigate, Route, Routes, useLocation} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom'
 
 import ParallaxRefresh from './components/Helpers/ParallaxRefresh'
 
@@ -20,7 +20,7 @@ import MusicPopup from './components/UI/MusicPopup/MusicPopup.jsx'
 import BioPopup from './components/UI/BioPopup.jsx'
 import {AxiosProvider} from "./api/AxiosProvider.jsx"
 import {useAppData} from "./api/hooks/useAppData.jsx"
-import {ErrorBoundary} from "./components/Helpers/ErrorBoundary.jsx";
+import {ErrorBoundary} from './components/Helpers/ErrorBoundary.jsx'
 
 const usePathname = () => {
   const location = useLocation()
@@ -38,15 +38,14 @@ const AppContent = ({appData, language, showBioPopup}) => (
       appData={appData}
       language={language}
     />
-    {/*<Multimedia*/}
-    {/*  texts={*/}
-    {/*    {*/}
-    {/*      pl: appData?.[language + 'About'],*/}
-    {/*      en: appData?.[language + 'About']*/}
-    {/*    }*/}
-    {/*  }      language={language}*/}
-    {/*/>*/}
-    <Contact contactData={appData} language={language}/>
+    <Multimedia
+      appData={appData}
+      language={language}
+    />
+    <Contact
+      appData={appData}
+      language={language}
+    />
   </>
 )
 

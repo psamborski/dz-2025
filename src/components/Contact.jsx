@@ -1,55 +1,55 @@
-import React, {useMemo} from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
-import {Element} from 'react-scroll'
-import {Parallax} from 'react-scroll-parallax'
+import { Element } from 'react-scroll'
+import { Parallax } from 'react-scroll-parallax'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import clsx from 'clsx'
 import SectionBackground from './UX/SectionBackground'
-import useScrollSpy from "../hooks/useScrollSpy.jsx";
+import useScrollSpy from '../hooks/useScrollSpy.jsx'
 
-export default function Contact({translations, language}) {
-  const t = translations?.[language] || {}
+export default function Contact({ appData, language }) {
+  const sectionRef = useScrollSpy('kontakt', '/kontakt')
 
-  const sectionRef = useScrollSpy('kontakt', '/kontakt');
+  const staticData = appData?.contactStatic?.items?.[0] || {}
+  const t = appData?.[`${language}Contact`]?.items?.[0] || {}
 
-  const instaLinks = useMemo(() => (t.socialmedia_instagram_link || '').split(';'), [t.socialmedia_instagram_link])
-  const instaTrans = useMemo(() => (t.socialmedia_instagram_title || '').split(';'), [t.socialmedia_instagram_title])
-  const fbLinks = useMemo(() => (t.socialmedia_fb_link || '').split(';'), [t.socialmedia_fb_link])
-  const fbTrans = useMemo(() => (t.socialmedia_fb_title || '').split(';'), [t.socialmedia_fb_title])
+  const instaLinks = useMemo(() => (staticData.instagramLink || '').split(';'), [staticData.instagramLink])
+  const instaTrans = useMemo(() => (t.instagramTitle || '').split(';'), [t.instagramTitle])
+  const fbLinks = useMemo(() => (staticData.facebookLink || '').split(';'), [staticData.facebookLink])
+  const fbTrans = useMemo(() => (t.facebookTitle || '').split(';'), [t.facebookTitle])
 
   return (
     <Element name="kontakt">
       <section id="kontakt" ref={sectionRef}>
-        <h2 className="mobile-title">{t.socialmedia_title}</h2>
+        <h2 className="mobile-title">{t.contactTitle}</h2>
 
-        <div className={'parallax-outer left-side photo'}>
-
+        <div className="parallax-outer left-side photo">
           <Parallax
-            className='parallax-inner'
+            className="parallax-inner"
             translateY={[-25, 25]}
-            style={{height: '100%'}}
+            style={{ height: '100%' }}
           >
-            <div className='photo-container'/>
+            <div className="photo-container" />
           </Parallax>
         </div>
 
         <div className="right-side text">
-          <SectionBackground/>
+          <SectionBackground />
 
-          <h2>{t.socialmedia_title}</h2>
+          <h2>{t.contactTitle}</h2>
 
           <PerfectScrollbar>
             <div className="contact-container">
               <ContactItem
                 iconClass="fas fa-envelope"
-                href={`mailto:${t.socialmedia_email}`}
-                text={t.socialmedia_email}
+                href={`mailto:${staticData.emailAddress}`}
+                text={staticData.emailAddress}
               />
 
               <ContactItem
                 iconClass="fas fa-phone"
-                href={`tel:${t.socialmedia_phone}`}
-                text={t.socialmedia_phone}
+                href={`tel:${staticData.phoneNumber}`}
+                text={staticData.phoneNumber}
               />
 
               <ContactItemGroup
@@ -71,11 +71,13 @@ export default function Contact({translations, language}) {
   )
 }
 
-function ContactItem({iconClass, href, text}) {
+function ContactItem({ iconClass, href, text }) {
+  if (!text) return null
+
   return (
     <div className="contact-item">
       <div className="contact-icon-container">
-        <span className={clsx('icon', iconClass)}/>
+        <span className={clsx('icon', iconClass)} />
       </div>
       <a href={href} className="contact-desc">
         {text}
@@ -84,37 +86,39 @@ function ContactItem({iconClass, href, text}) {
   )
 }
 
-function ContactItemGroup({iconClass, links, labels}) {
+function ContactItemGroup({ iconClass, links, labels }) {
   return (
     <div className="contact-item">
       <div className="contact-icon-container">
-        <span className={clsx('icon', iconClass)}/>
+        <span className={clsx('icon', iconClass)} />
       </div>
-      {links.map((link, index) => (
-        <a
-          key={link || index}
-          href={link}
-          className="contact-desc"
-          dangerouslySetInnerHTML={{__html: labels[index] || '#'}}
-        />
-      ))}
+      {links.map((link, index) =>
+        link ? (
+          <a
+            key={link || index}
+            href={link}
+            className="contact-desc"
+            dangerouslySetInnerHTML={{ __html: labels[index] || '#' }}
+          />
+        ) : null
+      )}
     </div>
   )
 }
 
 Contact.propTypes = {
-  translations: PropTypes.object,
-  language: PropTypes.string
+  appData: PropTypes.object.isRequired,
+  language: PropTypes.oneOf(['pl', 'en']).isRequired,
 }
 
 ContactItem.propTypes = {
   iconClass: PropTypes.string.isRequired,
   href: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired
+  text: PropTypes.string.isRequired,
 }
 
 ContactItemGroup.propTypes = {
   iconClass: PropTypes.string.isRequired,
   links: PropTypes.arrayOf(PropTypes.string).isRequired,
-  labels: PropTypes.arrayOf(PropTypes.string).isRequired
+  labels: PropTypes.arrayOf(PropTypes.string).isRequired,
 }

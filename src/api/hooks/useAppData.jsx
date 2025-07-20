@@ -1,5 +1,5 @@
-import {useCallback} from 'react'
-import {useAxios} from "../AxiosProvider.jsx";
+import { useCallback } from 'react'
+import { useAxios } from "../AxiosProvider.jsx"
 
 export const useAppData = () => {
   const axios = useAxios()
@@ -47,8 +47,8 @@ export const useAppData = () => {
           achievementsContent { json }
           choirsTitle
           choirsContent { json }
-          composistionsTitle
-          composistionsContent { json }
+          compositionsTitle
+          compositionsContent { json }
         }
       }
 
@@ -59,8 +59,8 @@ export const useAppData = () => {
           achievementsContent { json }
           choirsTitle
           choirsContent { json }
-          composistionsTitle
-          composistionsContent { json }
+          compositionsTitle
+          compositionsContent { json }
         }
       }
 
@@ -88,11 +88,52 @@ export const useAppData = () => {
           facebookLink
         }
       }
-    }
-    `
 
-    return axios.post('', {query})
+      plMultimedia: multimediaCollection(limit: 1, locale: "pl") {
+        items {
+          multimediaTitle
+          multimediaPhotosCollection {
+            items {
+              url
+              title
+              description
+              contentType
+            }
+          }
+          multimediaArchiveLink {
+            url
+            title
+            description
+            contentType
+          }
+          multimediaArchiveTitle
+        }
+      }
+
+      enMultimedia: multimediaCollection(limit: 1, locale: "en") {
+        items {
+          multimediaTitle
+          multimediaPhotosCollection {
+            items {
+              url
+              title
+              description
+              contentType
+            }
+          }
+          multimediaArchiveLink {
+            url
+            title
+            description
+            contentType
+          }
+          multimediaArchiveTitle
+        }
+      }
+    }`
+
+    return axios.post('', { query })
   }, [axios])
 
-  return {getAppData: getAppData}
+  return { getAppData }
 }

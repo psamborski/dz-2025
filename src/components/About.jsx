@@ -40,8 +40,8 @@ const About = ({appData, language}) => {
           content: documentToReactComponents(t?.choirsContent?.json || {})},
         {
           key: 'compositions',
-          title: t?.composistionsTitle,
-          content: documentToReactComponents(t?.composistionsContent?.json || {})
+          title: t?.compositionsTitle,
+          content: documentToReactComponents(t?.compositionsContent?.json || {})
         }
       ])
     }

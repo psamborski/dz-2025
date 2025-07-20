@@ -1,71 +1,83 @@
-import React, {useState} from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import {Element} from 'react-scroll'
-import {Parallax} from 'react-scroll-parallax'
+import { Element } from 'react-scroll'
+import { Parallax } from 'react-scroll-parallax'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import CrossfadeImage from 'react-crossfade-image'
 
+import useScrollSpy from '../hooks/useScrollSpy.jsx'
 import SectionBackground from './UX/SectionBackground'
 
-import Image1 from '../assets/gallery/1.jpg'
-import Image2 from '../assets/gallery/2.jpg'
-import Image3 from '../assets/gallery/3.jpg'
-import Image4 from '../assets/gallery/4.jpg'
-import Image5 from '../assets/gallery/5.jpg'
-import Image6 from '../assets/gallery/6.jpg'
-import Image7 from '../assets/gallery/7.jpg'
-import useScrollSpy from "../hooks/useScrollSpy.jsx";
+const Multimedia = ({ appData, language }) => {
+  const t = useMemo(
+    () => appData?.[`${language}Multimedia`]?.items?.[0] || {},
+    [appData, language]
+  )
 
-const Multimedia = ({translations, language}) => {
-  const [bgImage, setBgImage] = useState(Image5)
+  const photos = useMemo(() => t?.multimediaPhotosCollection?.items || [], [t])
+  const gallery = useMemo(() => photos.filter(photo => !!photo.url), [photos])
 
-  const sectionRef = useScrollSpy('multimedia', '/multimedia');
+  const archive = t?.multimediaArchiveLink
+  const archiveTitle = t?.multimediaArchiveTitle
+
+  const sectionRef = useScrollSpy('multimedia', '/multimedia')
+
+  const [bgImage, setBgImage] = useState('')
+
+  useEffect(() => {
+    if (gallery.length > 0 && !bgImage) {
+      setBgImage(gallery[0].url)
+    }
+  }, [gallery, bgImage])
 
   return (
-    <Element name="multimedia" meta={{title: 'Dariusz Zimnicki | Multimedia'}}>
+    <Element name="multimedia" meta={{ title: 'Dariusz Zimnicki | Multimedia' }}>
       <section id="multimedia" ref={sectionRef}>
-        <h2 className="mobile-title">{translations[language].multimedia_title}</h2>
+        <h2 className="mobile-title">{t.multimediaTitle}</h2>
 
-        <div className={'parallax-outer right-side photo'}>
+        <div className="parallax-outer right-side photo">
           <Parallax
-            className='parallax-inner'
+            className="parallax-inner"
             translateY={[-25, 25]}
-            style={{height: '100%'}}
+            style={{ height: '100%' }}
           >
             <CrossfadeImage
               src={bgImage}
-              containerClass='photo-container'
+              containerClass="photo-container"
             />
           </Parallax>
         </div>
 
         <div className="left-side text">
-          <SectionBackground/>
+          <SectionBackground />
 
-          <h2>{translations[language].multimedia_title}</h2>
+          <h2>{t.multimediaTitle}</h2>
 
           <PerfectScrollbar>
             <div className="gallery-container">
-              {[Image1, Image2, Image3, Image4, Image5, Image6, Image7].map((image, index) => (
+              {gallery.map((image, index) => (
                 <img
-                  key={index}
-                  src={image}
-                  alt={`Galeria - zdjęcie ${index + 1}`}
-                  onClick={() => setBgImage(image)}
-                  className={bgImage === image ? 'active-image' : ''}
+                  key={image.url || index}
+                  src={image.url}
+                  alt={image.title || `Galeria - zdjęcie ${index + 1}`}
+                  onClick={() => setBgImage(image.url)}
+                  className={bgImage === image.url ? 'active-image' : ''}
                 />
               ))}
             </div>
           </PerfectScrollbar>
-          <p>
-            <a
-              href={`/Dariusz_Zimnicki_zdjecia.zip`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {translations[language].multimedia_link}
-            </a>
-          </p>
+
+          {archive?.url && (
+            <p>
+              <a
+                href={archive.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {archiveTitle || 'Pobierz zdjęcia'}
+              </a>
+            </p>
+          )}
         </div>
       </section>
     </Element>
@@ -73,8 +85,8 @@ const Multimedia = ({translations, language}) => {
 }
 
 Multimedia.propTypes = {
-  translations: PropTypes.object.isRequired,
-  language: PropTypes.string.isRequired
+  appData: PropTypes.object.isRequired,
+  language: PropTypes.oneOf(['pl', 'en']).isRequired,
 }
 
 export default Multimedia

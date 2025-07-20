@@ -31,7 +31,7 @@ const Menu = ({pathname, language, changeLanguage, toggleMusicPopup}) => {
         className={clsx({'open-menu': showMenu, 'hidden-menu': !showMenu})}
       >
         <ScrollLink
-          to='top'
+          to='home'
           smooth
           duration={500}
           className={clsx({active: pathname === '/'})}

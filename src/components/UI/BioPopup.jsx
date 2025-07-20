@@ -1,44 +1,42 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 
-export default function BioPopup({
-                                   isBioPopupShown,
-                                   hideBioPopup,
-                                   translations,
-                                   language
-                                 }) {
+export default function BioPopup({ appData, isBioPopupShown, hideBioPopup, language }) {
+  const t = appData?.[`${language}Hero`]?.items?.[0]
+
   return (
     <section
-      id='bio-popup'
-      className={isBioPopupShown ? '' : 'popup-hidden'}
-      onClick={event => {
+      id="bio-popup"
+      className={clsx({ 'popup-hidden': !isBioPopupShown })}
+      onClick={(event) => {
         if (event.target.id === 'bio-popup') {
           hideBioPopup()
         }
       }}
     >
-      <div className='popup-container'>
+      <div className="popup-container">
         <div
-          className='close-popup'
+          className="close-popup"
           onClick={hideBioPopup}
         >
-          <span className='fas fa-times'/>
+          <span className="fas fa-times" />
         </div>
 
-        <h3>{translations[language].cv_title}</h3>
+        {t?.cvTitle && <h3>{t.cvTitle}</h3>}
 
-        <div
-          className='popup-content'
-          dangerouslySetInnerHTML={{__html: translations[language].cv_content}}
-        />
+        <div className="popup-content">
+          {t?.cvContent?.json && documentToReactComponents(t.cvContent.json)}
+        </div>
       </div>
     </section>
   )
 }
 
 BioPopup.propTypes = {
+  appData: PropTypes.object.isRequired,
   isBioPopupShown: PropTypes.bool.isRequired,
   hideBioPopup: PropTypes.func.isRequired,
-  translations: PropTypes.object.isRequired,
-  language: PropTypes.string.isRequired
+  language: PropTypes.oneOf(['pl', 'en']).isRequired,
 }

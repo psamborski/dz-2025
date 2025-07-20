@@ -27,7 +27,6 @@ const About = ({appData, language}) => {
   }, [appData, language])
 
   useEffect(() => {
-    console.log(!!t, t)
     if (t) {
       setTabs([
         {

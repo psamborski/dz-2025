@@ -129,7 +129,7 @@ const AppWrapper = () => (
           <Route path="/zyciorys" element={<App/>}/>
           <Route path="/multimedia" element={<App/>}/>
           <Route path="/kontakt" element={<App/>}/>
-          <Route path="/nuty" element={<Navigate to="/" replace/>}/>
+          <Route path="/nuty" element={<App/>}/>
           <Route path="*" element={<Error404/>}/>
         </Routes>
       </Router>

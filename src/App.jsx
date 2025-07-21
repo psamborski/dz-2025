@@ -100,13 +100,11 @@ const App = () => {
 
       <Loader show={timeoutLoading}/>
 
-      <ErrorBoundary>
-        <AppContent
-          appData={appData}
-          language={language}
-          showBioPopup={() => setBioPopupShown(true)}
-        />
-      </ErrorBoundary>
+      <AppContent
+        appData={appData}
+        language={language}
+        showBioPopup={() => setBioPopupShown(true)}
+      />
 
       <MusicPopup
         isShowMusicPopupShown={isMusicPopupShown}

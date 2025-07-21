@@ -5,7 +5,7 @@ import {CONFIG} from '/src/utils/config'
 export function createAxiosInstance({
                                       formData = false,
                                       authorization = `Bearer ${CONFIG.CONTENTFUL_CONSUME_API_KEY}`,
-                                      baseUrl = `https://graphql.contentful.com/content/v1/spaces/${CONFIG.CONTENTFUL_SPACE_ID}/`
+                                      baseUrl = `https://graphql.contentful.com/content/v1/spaces/${CONFIG.CONTENTFUL_SPACE_ID}/environments/master`
                                     } = {}) {
   const instance = axios.create({
     baseURL: baseUrl,

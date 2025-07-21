@@ -1,5 +1,4 @@
-@import "../../styles/variables.scss";
-@import '~hamburgers/_sass/hamburgers/hamburgers.scss';
+@use "../../styles/variables";
 
 .section-background {
   margin-top: 0 !important;
@@ -65,7 +64,7 @@
   height: 100vh;
   top: 0;
   left: 0;
-  background: $bg-gradient;
+  background: variables.$bg-gradient;
   z-index: 999999;
   display: flex;
   align-items: center;

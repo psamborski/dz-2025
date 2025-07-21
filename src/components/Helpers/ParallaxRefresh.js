@@ -1,14 +1,14 @@
-import { useLayoutEffect } from 'react'
-import { useController } from 'react-scroll-parallax'
+import { useEffect } from 'react';
+import { useParallaxController } from 'react-scroll-parallax';
 
-export default () => {
-  const { parallaxController } = useController()
+export default function ParallaxUpdater() {
+  const parallaxController = useParallaxController();
 
-  useLayoutEffect(() => {
-    const handler = () => parallaxController.update()
-    window.addEventListener('load', handler)
-    return () => window.removeEventListener('load', handler)
-  }, [parallaxController])
+  useEffect(() => {
+    const handler = () => parallaxController.update();
+    window.addEventListener('load', handler);
+    return () => window.removeEventListener('load', handler);
+  }, [parallaxController]);
 
-  return null
+  return null;
 }

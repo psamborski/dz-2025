@@ -1,14 +1,8 @@
-@import "../../styles/variables.scss";
-@import '~hamburgers/_sass/hamburgers/hamburgers.scss';
+@use "../../styles/variables";
 
 nav {
   .menu-icon {
     display: none;
-
-    @media only screen and (max-width: 1000px) {
-      display: block;
-    }
-
     width: 36px;
     height: 30px;
     position: fixed;
@@ -24,6 +18,10 @@ nav {
     background-color: transparent;
     border: none;
     outline: none;
+
+    @media only screen and (max-width: 1000px) {
+      display: block;
+    }
 
     span {
       display: block;
@@ -102,6 +100,7 @@ nav {
       position: relative;
       margin: .6em 0;
       transition: all .2s ease-in-out;
+      cursor: pointer;
 
       @media only screen and (max-width: 1400px) {
         font-size: 1.5em;
@@ -127,7 +126,7 @@ nav {
         // border-radius: 50%;
         transition: opacity .2s ease-in-out;
         opacity: 0;
-        background: $elem-gradient-1;
+        background: variables.$elem-gradient-1;
       }
 
       &.active span:after {
@@ -260,18 +259,18 @@ nav {
     justify-content: left;
 
     &:hover {
-      color: $primary-color;
+      color: variables.$primary-color;
     }
 
     .fas {
-      color: $primary-color;
+      color: variables.$primary-color;
       font-size: .9em;
       margin-right: 6px;
     }
   }
 
   .popup-container {
-    background: $bg-gradient;
+    background: variables.$bg-gradient;
     width: 100%;
     height: 100%;
     max-width: 1200px;
@@ -334,7 +333,7 @@ nav {
             width: initial;
 
             &:hover {
-              color: $primary-color;
+              color: variables.$primary-color;
             }
 
             .folder-icon {
@@ -366,6 +365,23 @@ nav {
 
         h4 {
           font-weight: 700;
+
+          .notes-group-header-icon {
+            transition: all .2s ease-in-out;
+            font-size: .7em;
+            padding-right: .4em;
+            transform-origin: 30% 50%;
+            color: variables.$primary-color;
+
+            &.rotated {
+              transform: rotate(90deg);
+            }
+          }
+        }
+
+        .notes-group-content {
+          overflow: hidden;
+          transition: max-height 0.4s ease;
         }
 
         .notes-box {

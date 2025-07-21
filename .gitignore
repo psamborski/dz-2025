@@ -86,3 +86,6 @@ deployment_keys.tar
 
 .github/.release
 release-artifacts-*
+package-lock.json
+
+src/utils/config.js

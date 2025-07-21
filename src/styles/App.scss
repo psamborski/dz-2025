@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Dosis&display=swap');
-@import "./variables.scss";
+@use "./variables";
 
 body {
   font-size: 18px;
@@ -30,7 +29,8 @@ section {
   border-right: 100px solid transparent;
   width: 100%;
   height: 100vh;
-  background: $bg-gradient;
+  background: variables.$bg-gradient;
+  overflow: hidden;
 
   @media only screen and (max-width: 1000px) {
     border-right: none;
@@ -75,7 +75,7 @@ section {
     }
 
     &:after {
-      background: $elem-gradient-1;
+      background: variables.$elem-gradient-1;
       content: '\A';
       width: 40px;
       height: 10px;
@@ -155,7 +155,7 @@ section {
     cursor: pointer;
 
     &:hover {
-      color: $primary-color;
+      color: variables.$primary-color;
       text-decoration: underline;
     }
   }
@@ -180,7 +180,7 @@ section {
 
       @media only screen and (max-width: 1000px) {
         top: 100vh;
-        height: 100vh;
+        height: 100vh !important;
 
         h1, h2 {
           display: none;
@@ -195,7 +195,7 @@ section {
     &.photo {
       @media only screen and (max-width: 1000px) {
         top: 0;
-        height: 100vh;
+        height: 100vh !important;
       }
     }
   }
@@ -211,11 +211,11 @@ section {
 
     @media only screen and (max-width: 1000px) {
       border-left: 0;
-      height: 100vh;
+      height: 100vh !important;
       top: 80vh;
     }
 
-      &.photo {
+    &.photo {
       &:before {
         background: linear-gradient(90deg, rgba(0, 0, 0, .6) 0%, rgba(0, 0, 0, 0) 50%);
         content: '\A';
@@ -303,7 +303,7 @@ section {
   .right-side {
     &.photo {
       .photo-container {
-        background-image: url("../static/bg/home.jpg");
+        background-image: url("../assets/bg/home.jpg");
       }
     }
   }
@@ -334,14 +334,14 @@ section {
       align-items: center;
       justify-content: center;
       border-radius: 20px;
-      border: 1px solid $primary-color;
+      border: 1px solid variables.$primary-color;
       font-weight: 900;
       font-size: 1em;
     }
 
     &.bio:hover {
       cursor: pointer;
-      background: $elem-gradient-1;
+      background: variables.$elem-gradient-1;
     }
   }
 }
@@ -354,7 +354,7 @@ section {
       }
 
       .photo-container {
-        background-image: url("../static/bg/achievements.jpg");
+        background-image: url("../assets/bg/achievements.jpg");
         background-position: 80% 100%;
       }
     }
@@ -388,7 +388,7 @@ section {
 
             &:after {
               z-index: -1;
-              background: $elem-gradient-1;
+              background: variables.$elem-gradient-1;
               content: '\A';
               width: 100%;
               height: 2px;
@@ -510,7 +510,7 @@ section {
         }
       }
 
-        &.active-image, &:hover {
+      &.active-image, &:hover {
         opacity: 1;
       }
     }
@@ -534,7 +534,7 @@ section {
       }
 
       .photo-container {
-        background-image: url("../static/bg/contact.jpg");
+        background-image: url("../assets/bg/contact.jpg");
         background-position: 60% 100%;
       }
     }

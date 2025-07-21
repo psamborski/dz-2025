@@ -59,6 +59,8 @@ const App = () => {
   const [isMusicPopupShown, setMusicPopupShown] = useState(pathname.endsWith('nuty'))
   const [isBioPopupShown, setBioPopupShown] = useState(false)
 
+  const [error, setError] = useState(null)
+
   useEffect(() => {
     getAppData()
       .then(resp => {
@@ -68,6 +70,7 @@ const App = () => {
       })
       .catch(e => {
         console.error(e)
+        setError(e)
         throw new Error('Invalid call')
       })
   }, [getAppData])
@@ -81,6 +84,8 @@ const App = () => {
   const changeLanguage = () => {
     setLanguage((prev) => (prev === 'pl' ? 'en' : 'pl'))
   }
+
+  if (error) throw new Error(typeof error === 'string' ? error : error?.message)
 
   return (
     <ParallaxProvider>

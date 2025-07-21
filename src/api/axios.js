@@ -18,17 +18,17 @@ export function createAxiosInstance({
   }
 
   instance.interceptors.request.use((request) => {
-    console.log('Axios request:')
-    console.dir(request)
-    console.trace()
+    // console.log('Axios request:')
+    // console.dir(request)
+    // console.trace()
     return request
   })
 
   instance.interceptors.response.use(
     (response) => camelcaseKeys(response, {deep: true}),
     (error) => {
-      console.log('Axios error:')
-      console.dir(error)
+      // console.log('Axios error:')
+      // console.dir(error)
       return Promise.reject(error?.response?.data || 'Something went wrong')
     }
   )

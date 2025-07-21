@@ -85,7 +85,7 @@ const App = () => {
     setLanguage((prev) => (prev === 'pl' ? 'en' : 'pl'))
   }
 
-  if (error) throw new Error(e)
+  if (error) throw new Error(typeof error === 'string' ? error : error?.message)
 
   return (
     <ParallaxProvider>

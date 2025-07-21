@@ -1,56 +1,104 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import axios from 'axios'
 import clsx from 'clsx'
 import NotesFolder from './components/NotesFolder.jsx'
 import ListOfFolders from './components/ListOfFolders.jsx'
+import { useNotesData } from '../../../api/hooks/useNotesData.jsx'
 
 const translations = {
   pl: {
-    title: 'Opracowania',
+    title: 'Nuty',
     loading: 'Wczytywanie...',
     error: 'Błąd ładowania danych'
   },
   en: {
-    title: 'Compositions',
+    title: 'Music sheets',
     loading: 'Loading...',
     error: 'Error loading data'
   }
 }
 
 const MusicPopup = ({ isShowMusicPopupShown, hideMusicPopup, language }) => {
-  const [loading, setLoading] = useState(true)
-  const [notes, setNotes] = useState(null)
   const [chosenFolder, setChosenFolder] = useState(null)
+  const [data, setData] = useState([])
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
+  const { getNotesData } = useNotesData()
   const { title, loading: loadingText, error: errorText } = translations[language] || translations.en
 
   useEffect(() => {
-    if (isShowMusicPopupShown) {
-      getNotes()
-    }
-  }, [isShowMusicPopupShown])
+    if (!isShowMusicPopupShown) return
 
-  const getNotes = () => {
     setLoading(true)
     setError(false)
 
-    axios.get('http://cms.dariuszzimnicki.com/getNotes', {
-      headers: {
-        Authorization: '$2y$12$u/OLECVbrHmop.a2uup5/.Fc4sPHSOgJlLz0NlE19z7s.UxSbsmWK'
-      }
-    })
-        .then(response => {
-          setNotes(response.data)
-          setLoading(false)
+    getNotesData()
+      .then(res => {
+        const plCategories = res.data?.data?.plCategories?.items || []
+        const enCategories = res.data?.data?.enCategories?.items || []
+        const plSubcats = res.data?.data?.plSubcategories?.items || []
+        const enSubcats = res.data?.data?.enSubcategories?.items || []
+        const plNotes = res.data?.data?.plNotes?.items || []
+        const enNotes = res.data?.data?.enNotes?.items || []
+
+        const categories = plCategories.map(plCat => {
+          const slug = plCat.slug
+          const enCat = enCategories.find(c => c.slug === slug)
+
+          const subcats = plSubcats.filter(sc => sc.mainNotesCategory?.slug === slug)
+
+          const groups = subcats.map(plSub => {
+            const subSlug = plSub.slug
+            const enSub = enSubcats.find(es => es.slug === subSlug)
+
+            const groupPlNotes = plNotes.filter(note => note.notesSubcategory?.slug === subSlug)
+            const groupEnNotes = enNotes.filter(note => note.notesSubcategory?.slug === subSlug)
+
+            const notes = groupPlNotes.map(plNote => {
+              const matchEnNote = groupEnNotes.find(enNote =>
+                enNote.notesFile?.url === plNote.notesFile?.url
+              )
+
+              return {
+                id: plNote.notesFile?.url,
+                file: plNote.notesFile?.url,
+                pl: {
+                  name: plNote.notesTitle,
+                  description: plNote.notesDescription
+                },
+                en: {
+                  name: matchEnNote?.notesTitle || plNote.notesTitle,
+                  description: matchEnNote?.notesDescription || ''
+                }
+              }
+            })
+
+            return {
+              id: subSlug,
+              pl: plSub.subcategoryName,
+              en: enSub?.subcategoryName || plSub.subcategoryName,
+              notes
+            }
+          })
+
+          return {
+            id: slug,
+            pl: plCat.categoryName,
+            en: enCat?.categoryName || plCat.categoryName,
+            groups
+          }
         })
-        .catch(() => {
-          setNotes(null)
-          setLoading(false)
-          setError(true)
-        })
-  }
+
+        setData(categories)
+        setLoading(false)
+      })
+      .catch(err => {
+        console.error(err)
+        setError(true)
+        setLoading(false)
+      })
+  }, [isShowMusicPopupShown, getNotesData])
 
   const handleHidePopup = () => {
     hideMusicPopup()
@@ -58,53 +106,49 @@ const MusicPopup = ({ isShowMusicPopupShown, hideMusicPopup, language }) => {
   }
 
   return (
-      <section
-          id='music-popup'
-          className={clsx({ 'popup-hidden': !isShowMusicPopupShown })}
-          onClick={event => {
-            if (event.target.id === 'music-popup') {
-              handleHidePopup()
-            }
-          }}
-      >
-        <div className='popup-container'>
-          <div className='close-popup' onClick={handleHidePopup}>
-            <span className='fas fa-times' />
-          </div>
-
-          <h3>
-            {chosenFolder ? chosenFolder?.[language] : title}
-          </h3>
-
-          <div className='popup-content'>
-            {loading ? (
-                <div className='popup-loader'>
-                  <span>{loadingText}</span>
-                </div>
-            ) : error ? (
-                <div className='popup-error'>
-                  <span>{errorText}</span>
-                </div>
-            ) : chosenFolder ? (
-                <NotesFolder
-                    setFolder={setChosenFolder}
-                    chosenFolder={chosenFolder}
-                    isShowMusicPopupShown={isShowMusicPopupShown}
-                    hideMusicPopup={hideMusicPopup}
-                    language={language}
-                />
-            ) : (
-                <ListOfFolders
-                    folders={notes}
-                    setFolder={setChosenFolder}
-                    isShowMusicPopupShown={isShowMusicPopupShown}
-                    hideMusicPopup={hideMusicPopup}
-                    language={language}
-                />
-            )}
-          </div>
+    <section
+      id="music-popup"
+      className={clsx({ 'popup-hidden': !isShowMusicPopupShown })}
+      onClick={event => {
+        if (event.target.id === 'music-popup') handleHidePopup()
+      }}
+    >
+      <div className="popup-container">
+        <div className="close-popup" onClick={handleHidePopup}>
+          <span className="fas fa-times" />
         </div>
-      </section>
+
+        <h3>{chosenFolder ? chosenFolder?.[language] : title}</h3>
+
+        <div className="popup-content">
+          {loading ? (
+            <div className="popup-loader">
+              <span>{loadingText}</span>
+            </div>
+          ) : error ? (
+            <div className="popup-error">
+              <span>{errorText}</span>
+            </div>
+          ) : chosenFolder ? (
+            <NotesFolder
+              setFolder={setChosenFolder}
+              chosenFolder={chosenFolder}
+              isShowMusicPopupShown={isShowMusicPopupShown}
+              hideMusicPopup={hideMusicPopup}
+              language={language}
+            />
+          ) : (
+            <ListOfFolders
+              folders={data}
+              setFolder={setChosenFolder}
+              isShowMusicPopupShown={isShowMusicPopupShown}
+              hideMusicPopup={hideMusicPopup}
+              language={language}
+            />
+          )}
+        </div>
+      </div>
+    </section>
   )
 }
 

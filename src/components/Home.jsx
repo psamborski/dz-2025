@@ -14,12 +14,15 @@ export default function Home({appData, language, showBioPopup}) {
   const sectionRef = useScrollSpy('home', '/')
 
   const t = appData?.[`${language}Hero`]?.items?.[0] || {}
+  const staticData = appData?.heroStatic?.items?.[0] || {}
 
   const files = t?.cvFilesCollection?.items || []
   const bioPdf = files.find(file => file?.url?.toLowerCase().endsWith('.pdf'))
   const bioDocx = files.find(file =>
     ['.docx', '.doc'].some(ext => file?.url?.toLowerCase().endsWith(ext))
   )
+
+  const photoStyle = staticData?.homePhoto?.url ? { backgroundImage: `url(${staticData.homePhoto?.url})` } : {}
 
   return (
     <Element name="home">
@@ -28,7 +31,7 @@ export default function Home({appData, language, showBioPopup}) {
           <h1 className="mobile-title">{t.websiteTitle}</h1>
 
           <Parallax translateY={[-25, 25]} style={{height: '100%'}}>
-            <div className="photo-container" style={{height: '100%'}}/>
+            <div className="photo-container" style={{height: '100%', ...photoStyle}}/>
           </Parallax>
         </div>
 
@@ -37,7 +40,7 @@ export default function Home({appData, language, showBioPopup}) {
 
           <h1>{t.websiteTitle}</h1>
 
-          <PerfectScrollbar>
+          <PerfectScrollbar options={{ suppressScrollX: true }}>
             <div className="bio-files-container">
               <span className="bio" onClick={showBioPopup}>CV</span>
 

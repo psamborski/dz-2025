@@ -18,6 +18,8 @@ export default function Contact({ appData, language }) {
   const fbLinks = useMemo(() => (staticData.facebookLink || '').split(';'), [staticData.facebookLink])
   const fbTrans = useMemo(() => (t.facebookTitle || '').split(';'), [t.facebookTitle])
 
+  const photoStyle = staticData?.contactPhoto?.url ? { backgroundImage: `url(${staticData.contactPhoto.url})` } : {}
+
   return (
     <Element name="kontakt">
       <section id="kontakt" ref={sectionRef}>
@@ -29,7 +31,7 @@ export default function Contact({ appData, language }) {
             translateY={[-25, 25]}
             style={{ height: '100%' }}
           >
-            <div className="photo-container" />
+            <div className="photo-container" style={photoStyle} />
           </Parallax>
         </div>
 

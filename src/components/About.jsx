@@ -47,6 +47,10 @@ const About = ({appData, language}) => {
     }
   }, [t])
 
+  const staticData = appData?.bioStatic?.items?.[0] || {}
+
+  const photoStyle = staticData?.bioPhoto?.url ? { backgroundImage: `url(${staticData?.bioPhoto.url})` } : {}
+
   return (
     <Element name="zyciorys">
       <section id="zyciorys" ref={sectionRef}>
@@ -54,7 +58,7 @@ const About = ({appData, language}) => {
 
         <div className="parallax-outer left-side photo">
           <Parallax className="parallax-inner" translateY={[-25, 25]} style={{height: '100%'}}>
-            <div className="photo-container"/>
+            <div className="photo-container" style={photoStyle} />
           </Parallax>
         </div>
 

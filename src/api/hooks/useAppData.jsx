@@ -39,7 +39,18 @@ export const useAppData = () => {
           }
         }
       }
-
+      
+      heroStatic: homeCollection(limit: 1) {
+        items {
+          homePhoto {
+            url
+            title
+            description
+            contentType
+          }
+        }
+      }
+      
       plBio: bioCollection(limit: 1, locale: "pl") {
         items {
           bioTitle
@@ -49,6 +60,12 @@ export const useAppData = () => {
           choirsContent { json }
           compositionsTitle
           compositionsContent { json }
+          bioPhoto {
+            url
+            title
+            description
+            contentType
+          }
         }
       }
 
@@ -61,6 +78,23 @@ export const useAppData = () => {
           choirsContent { json }
           compositionsTitle
           compositionsContent { json }
+          bioPhoto {
+            url
+            title
+            description
+            contentType
+          }
+        }
+      }
+      
+      bioStatic: bioCollection(limit: 1) {
+        items {
+          bioPhoto {
+            url
+            title
+            description
+            contentType
+          }
         }
       }
 
@@ -86,6 +120,12 @@ export const useAppData = () => {
           emailAddress
           instagramLink
           facebookLink
+          contactPhoto {
+            url
+            title
+            description
+            contentType
+          }
         }
       }
 

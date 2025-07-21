@@ -53,7 +53,7 @@ const Multimedia = ({ appData, language }) => {
 
           <h2>{t.multimediaTitle}</h2>
 
-          <PerfectScrollbar>
+          <PerfectScrollbar options={{ suppressScrollX: true }}>
             <div className="gallery-container">
               {gallery.map((image, index) => (
                 <img

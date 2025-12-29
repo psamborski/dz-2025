@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import NotesFolder from './components/NotesFolder.jsx'
 import ListOfFolders from './components/ListOfFolders.jsx'
-import { useNotesData } from '../../../api/hooks/useNotesData.jsx'
+import {useNotesData} from '../../../api/hooks/useNotesData.jsx'
 
 const translations = {
   pl: {
@@ -18,14 +18,14 @@ const translations = {
   }
 }
 
-const MusicPopup = ({ isShowMusicPopupShown, hideMusicPopup, language }) => {
+const MusicPopup = ({isShowMusicPopupShown, hideMusicPopup, language}) => {
   const [chosenFolder, setChosenFolder] = useState(null)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
-  const { getNotesData } = useNotesData()
-  const { title, loading: loadingText, error: errorText } = translations[language] || translations.en
+  const {getNotesData} = useNotesData()
+  const {title, loading: loadingText, error: errorText} = translations[language] || translations.en
 
   useEffect(() => {
     if (!isShowMusicPopupShown) return
@@ -43,25 +43,31 @@ const MusicPopup = ({ isShowMusicPopupShown, hideMusicPopup, language }) => {
         const enNotes = res.data?.data?.enNotes?.items || []
 
         const categories = plCategories.map(plCat => {
-          const slug = plCat.slug
-          const enCat = enCategories.find(c => c.slug === slug)
+          const categoryId = plCat.sys.id
+          const enCat = enCategories.find(c => c.sys.id === categoryId)
 
-          const subcats = plSubcats.filter(sc => sc.mainNotesCategory?.slug === slug)
+          const subcats = plSubcats.filter(
+            sc => sc.mainNotesCategory?.sys.id === categoryId
+          )
 
           const groups = subcats.map(plSub => {
-            const subSlug = plSub.slug
-            const enSub = enSubcats.find(es => es.slug === subSlug)
+            const subId = plSub.sys.id
+            const enSub = enSubcats.find(es => es.sys.id === subId)
 
-            const groupPlNotes = plNotes.filter(note => note.notesSubcategory?.slug === subSlug)
-            const groupEnNotes = enNotes.filter(note => note.notesSubcategory?.slug === subSlug)
+            const groupPlNotes = plNotes.filter(
+              note => note.notesSubcategory?.sys.id === subId
+            )
+            const groupEnNotes = enNotes.filter(
+              note => note.notesSubcategory?.sys.id === subId
+            )
 
             const notes = groupPlNotes.map(plNote => {
-              const matchEnNote = groupEnNotes.find(enNote =>
-                enNote.sys.id === plNote.sys.id
+              const matchEnNote = groupEnNotes.find(
+                enNote => enNote.sys.id === plNote.sys.id
               )
 
               return {
-                id: plNote.notesFile?.url,
+                id: plNote.sys.id,
                 file: plNote.notesFile?.url,
                 link: plNote.notesOptionalLink,
                 pl: {
@@ -76,7 +82,7 @@ const MusicPopup = ({ isShowMusicPopupShown, hideMusicPopup, language }) => {
             })
 
             return {
-              id: subSlug,
+              id: subId,
               pl: plSub.subcategoryName,
               en: enSub?.subcategoryName || plSub.subcategoryName,
               notes
@@ -84,13 +90,12 @@ const MusicPopup = ({ isShowMusicPopupShown, hideMusicPopup, language }) => {
           })
 
           return {
-            id: slug,
+            id: categoryId,
             pl: plCat.categoryName,
             en: enCat?.categoryName || plCat.categoryName,
             groups
           }
         })
-
         setData(categories)
         setLoading(false)
       })
@@ -109,14 +114,14 @@ const MusicPopup = ({ isShowMusicPopupShown, hideMusicPopup, language }) => {
   return (
     <section
       id="music-popup"
-      className={clsx({ 'popup-hidden': !isShowMusicPopupShown })}
+      className={clsx({'popup-hidden': !isShowMusicPopupShown})}
       onClick={event => {
         if (event.target.id === 'music-popup') handleHidePopup()
       }}
     >
       <div className="popup-container">
         <div className="close-popup" onClick={handleHidePopup}>
-          <span className="fas fa-times" />
+          <span className="fas fa-times"/>
         </div>
 
         <h3>{chosenFolder ? chosenFolder?.[language] : title}</h3>

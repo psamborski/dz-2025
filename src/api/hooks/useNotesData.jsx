@@ -9,23 +9,23 @@ export const useNotesData = () => {
       plCategories: sheetCategoryCollection(locale: "pl") {
         items {
           categoryName
-          slug
+          sys { id }
         }
       }
       enCategories: sheetCategoryCollection(locale: "en") {
         items {
           categoryName
-          slug
+          sys { id }
         }
       }
 
       plSubcategories: sheetSubcategoryCollection(locale: "pl") {
         items {
           subcategoryName
-          slug
+          sys { id }
           mainNotesCategory {
             categoryName
-            slug
+            sys { id }
           }
         }
       }
@@ -33,10 +33,10 @@ export const useNotesData = () => {
       enSubcategories: sheetSubcategoryCollection(locale: "en") {
         items {
           subcategoryName
-          slug
+          sys { id }
           mainNotesCategory {
             categoryName
-            slug
+            sys { id }
           }
         }
       }
@@ -55,10 +55,10 @@ export const useNotesData = () => {
           }
           notesSubcategory {
             subcategoryName
-            slug
+            sys { id }
             mainNotesCategory {
               categoryName
-              slug
+              sys { id }
             }
           }
         }
@@ -78,10 +78,10 @@ export const useNotesData = () => {
           }
           notesSubcategory {
             subcategoryName
-            slug
+            sys { id }
             mainNotesCategory {
               categoryName
-              slug
+              sys { id }
             }
           }
         }

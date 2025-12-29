@@ -57,19 +57,20 @@ const MusicPopup = ({ isShowMusicPopupShown, hideMusicPopup, language }) => {
 
             const notes = groupPlNotes.map(plNote => {
               const matchEnNote = groupEnNotes.find(enNote =>
-                enNote.notesFile?.url === plNote.notesFile?.url
+                enNote.sys.id === plNote.sys.id
               )
 
               return {
                 id: plNote.notesFile?.url,
                 file: plNote.notesFile?.url,
+                link: plNote.notesOptionalLink,
                 pl: {
                   name: plNote.notesTitle,
-                  description: plNote.notesDescription
+                  description: plNote.notesDesc || null
                 },
                 en: {
                   name: matchEnNote?.notesTitle || plNote.notesTitle,
-                  description: matchEnNote?.notesDescription || ''
+                  description: matchEnNote?.notesDesc || null
                 }
               }
             })

@@ -34,14 +34,19 @@ const NotesFolder = ({setFolder, chosenFolder, language}) => {
         const ref = contentRefs.current[group.id]
 
         return (
-          <div className="notes-group" key={group?.id ?? 'notes-group-0'}>
+          <div className="notes-group" key={group.id}>
             <h4
               className="notes-group-header"
               onClick={() => toggleGroup(group.id)}
               style={{cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem'}}
             >
               <span
-                className={clsx('notes-group-header-icon', 'fas', isExpanded ? 'fa-chevron-right rotated' : 'fa-chevron-right')}/>
+                className={clsx(
+                  'notes-group-header-icon',
+                  'fas',
+                  isExpanded ? 'fa-chevron-right rotated' : 'fa-chevron-right'
+                )}
+              />
               {groupName}
             </h4>
 
@@ -55,20 +60,45 @@ const NotesFolder = ({setFolder, chosenFolder, language}) => {
               {notesList.map(notes => {
                 const noteContent = notes?.[language] ?? {}
                 const name = noteContent.name ?? ''
-                const description = noteContent.description ?? ''
-                const fileLink = notes?.file ?? '#'
+                const description = noteContent.description?.json ?? null
+                const fileLink = notes?.file || null
+                const optionalLink = notes?.link || null
 
                 return (
-                  <div className="notes-box" key={notes?.id ?? 'notes-0'}>
+                  <div className="notes-box" key={notes.id}>
                     <div className="notes-desc-container">
                       <h5>{name}</h5>
-                      <p>{documentToReactComponents(description)}</p>
+                      {description && (
+                        <div className="notes-description">
+                          {documentToReactComponents(description)}
+                        </div>
+                      )}
                     </div>
 
                     <div className="notes-download-container">
-                      <a href={fileLink} rel="noopener noreferrer" target="_blank">
-                        <span className="fas fa-file-download"/>
-                      </a>
+                      {optionalLink && (
+                        <a
+                          href={optionalLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="notes-external-link"
+                          title={optionalLink}
+                        >
+                          <span className="fas fa-link"/>
+                        </a>
+                      )}
+
+                      {fileLink && (
+                        <a
+                          href={fileLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="notes-file-download"
+                          title={language === 'pl' ? 'Pobierz plik' : 'Download file'}
+                        >
+                          <span className="fas fa-file-download"/>
+                        </a>
+                      )}
                     </div>
                   </div>
                 )
@@ -86,20 +116,21 @@ NotesFolder.propTypes = {
   chosenFolder: PropTypes.shape({
     groups: PropTypes.arrayOf(
       PropTypes.shape({
-        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
         pl: PropTypes.string,
         en: PropTypes.string,
         notes: PropTypes.arrayOf(
           PropTypes.shape({
-            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+            id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
             file: PropTypes.string,
+            link: PropTypes.string,
             pl: PropTypes.shape({
               name: PropTypes.string,
-              description: PropTypes.string
+              description: PropTypes.object
             }),
             en: PropTypes.shape({
               name: PropTypes.string,
-              description: PropTypes.string
+              description: PropTypes.object
             })
           })
         )

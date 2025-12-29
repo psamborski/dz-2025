@@ -41,10 +41,12 @@ export const useNotesData = () => {
         }
       }
 
-      plNotes: musicSheetCollection(locale: "pl") {
+      plNotes: musicSheetCollection(locale: "pl", limit: 1000) {
         items {
+          sys { id }
           notesTitle
-          notesDescription
+          notesDesc { json }
+          notesOptionalLink
           notesFile {
             url
             title
@@ -62,10 +64,12 @@ export const useNotesData = () => {
         }
       }
 
-      enNotes: musicSheetCollection(locale: "en") {
+      enNotes: musicSheetCollection(locale: "en", limit: 1000) {
         items {
+          sys { id }
           notesTitle
-          notesDescription
+          notesDesc { json }
+          notesOptionalLink
           notesFile {
             url
             title

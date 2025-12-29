@@ -9,23 +9,23 @@ export const useNotesData = () => {
       plCategories: sheetCategoryCollection(locale: "pl") {
         items {
           categoryName
-          slug
+          sys { id }
         }
       }
       enCategories: sheetCategoryCollection(locale: "en") {
         items {
           categoryName
-          slug
+          sys { id }
         }
       }
 
       plSubcategories: sheetSubcategoryCollection(locale: "pl") {
         items {
           subcategoryName
-          slug
+          sys { id }
           mainNotesCategory {
             categoryName
-            slug
+            sys { id }
           }
         }
       }
@@ -33,18 +33,20 @@ export const useNotesData = () => {
       enSubcategories: sheetSubcategoryCollection(locale: "en") {
         items {
           subcategoryName
-          slug
+          sys { id }
           mainNotesCategory {
             categoryName
-            slug
+            sys { id }
           }
         }
       }
 
-      plNotes: musicSheetCollection(locale: "pl") {
+      plNotes: musicSheetCollection(locale: "pl", limit: 1000) {
         items {
+          sys { id }
           notesTitle
-          notesDescription
+          notesDesc { json }
+          notesOptionalLink
           notesFile {
             url
             title
@@ -53,19 +55,21 @@ export const useNotesData = () => {
           }
           notesSubcategory {
             subcategoryName
-            slug
+            sys { id }
             mainNotesCategory {
               categoryName
-              slug
+              sys { id }
             }
           }
         }
       }
 
-      enNotes: musicSheetCollection(locale: "en") {
+      enNotes: musicSheetCollection(locale: "en", limit: 1000) {
         items {
+          sys { id }
           notesTitle
-          notesDescription
+          notesDesc { json }
+          notesOptionalLink
           notesFile {
             url
             title
@@ -74,10 +78,10 @@ export const useNotesData = () => {
           }
           notesSubcategory {
             subcategoryName
-            slug
+            sys { id }
             mainNotesCategory {
               categoryName
-              slug
+              sys { id }
             }
           }
         }

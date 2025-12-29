@@ -394,7 +394,7 @@ nav {
           .notes-desc-container {
             flex-grow: 2;
 
-            p {
+            div {
               font-size: 1.43em;
               margin: .45em 0 0 0;
             }
@@ -403,6 +403,8 @@ nav {
           .notes-download-container {
             margin-left: 1.6em;
             padding-right: 1.6em;
+            display: flex;
+            gap: .5rem;
 
             a {
               font-size: 1.6em;

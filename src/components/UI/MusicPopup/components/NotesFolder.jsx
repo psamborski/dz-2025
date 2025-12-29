@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, {useRef, useState} from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
+import {documentToReactComponents} from '@contentful/rich-text-react-renderer'
 
-const NotesFolder = ({ setFolder, chosenFolder, language }) => {
+const NotesFolder = ({setFolder, chosenFolder, language}) => {
   const [expandedGroups, setExpandedGroups] = useState({})
   const contentRefs = useRef({})
 
@@ -18,7 +19,7 @@ const NotesFolder = ({ setFolder, chosenFolder, language }) => {
   return (
     <div>
       <span className="folders-back" onClick={() => setFolder(null)}>
-        <span className="fas fa-chevron-left" /> {language === 'pl' ? 'wróć' : 'back'}
+        <span className="fas fa-chevron-left"/> {language === 'pl' ? 'wróć' : 'back'}
       </span>
 
       {groups.map(group => {
@@ -37,9 +38,10 @@ const NotesFolder = ({ setFolder, chosenFolder, language }) => {
             <h4
               className="notes-group-header"
               onClick={() => toggleGroup(group.id)}
-              style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+              style={{cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem'}}
             >
-              <span className={clsx('notes-group-header-icon', 'fas', isExpanded ? 'fa-chevron-right rotated' : 'fa-chevron-right')} />
+              <span
+                className={clsx('notes-group-header-icon', 'fas', isExpanded ? 'fa-chevron-right rotated' : 'fa-chevron-right')}/>
               {groupName}
             </h4>
 
@@ -60,12 +62,12 @@ const NotesFolder = ({ setFolder, chosenFolder, language }) => {
                   <div className="notes-box" key={notes?.id ?? 'notes-0'}>
                     <div className="notes-desc-container">
                       <h5>{name}</h5>
-                      <p>{description}</p>
+                      <p>{documentToReactComponents(description)}</p>
                     </div>
 
                     <div className="notes-download-container">
                       <a href={fileLink} rel="noopener noreferrer" target="_blank">
-                        <span className="fas fa-file-download" />
+                        <span className="fas fa-file-download"/>
                       </a>
                     </div>
                   </div>

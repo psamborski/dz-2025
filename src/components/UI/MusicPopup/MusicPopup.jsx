@@ -1,9 +1,12 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import NotesFolder from './components/NotesFolder.jsx'
 import ListOfFolders from './components/ListOfFolders.jsx'
-import {useNotesData} from '../../../api/hooks/useNotesData.jsx'
+import { useNotesData } from '../../../api/hooks/useNotesData.jsx'
+import NotesSearchBar from './components/NotesSearchBar.jsx'
+import { searchNotes } from './utils.js'
+import SearchResults from './components/SearchResults.jsx'
 
 const translations = {
   pl: {
@@ -18,14 +21,17 @@ const translations = {
   }
 }
 
-const MusicPopup = ({isShowMusicPopupShown, hideMusicPopup, language}) => {
+const MusicPopup = ({ isShowMusicPopupShown, hideMusicPopup, language }) => {
   const [chosenFolder, setChosenFolder] = useState(null)
+  const [expandedGroupId, setExpandedGroupId] = useState(null)
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const {getNotesData} = useNotesData()
-  const {title, loading: loadingText, error: errorText} = translations[language] || translations.en
+  const { getNotesData } = useNotesData()
+  const { title, loading: loadingText, error: errorText } =
+  translations[language] || translations.en
 
   useEffect(() => {
     if (!isShowMusicPopupShown) return
@@ -96,6 +102,7 @@ const MusicPopup = ({isShowMusicPopupShown, hideMusicPopup, language}) => {
             groups
           }
         })
+
         setData(categories)
         setLoading(false)
       })
@@ -109,22 +116,59 @@ const MusicPopup = ({isShowMusicPopupShown, hideMusicPopup, language}) => {
   const handleHidePopup = () => {
     hideMusicPopup()
     setChosenFolder(null)
+    setExpandedGroupId(null)
+    setSearchQuery('')
   }
+
+  const handleNavigateToCategory = categoryId => {
+    const category = data.find(cat => cat.id === categoryId)
+    if (!category) return
+
+    setSearchQuery('')
+    setExpandedGroupId(null)
+    setChosenFolder(category)
+  }
+
+  const handleNavigateToGroup = (categoryId, groupId) => {
+    const category = data.find(cat => cat.id === categoryId)
+    if (!category) return
+
+    setSearchQuery('')
+    setChosenFolder(category)
+    setExpandedGroupId(groupId)
+  }
+
+  const hasSearch = searchQuery.trim().length > 0
+  const searchResults = hasSearch
+    ? searchNotes(data, searchQuery, language)
+    : []
 
   return (
     <section
       id="music-popup"
-      className={clsx({'popup-hidden': !isShowMusicPopupShown})}
+      className={clsx({ 'popup-hidden': !isShowMusicPopupShown })}
       onClick={event => {
         if (event.target.id === 'music-popup') handleHidePopup()
       }}
     >
       <div className="popup-container">
         <div className="close-popup" onClick={handleHidePopup}>
-          <span className="fas fa-times"/>
+          <span className="fas fa-times" />
         </div>
 
         <h3>{chosenFolder ? chosenFolder?.[language] : title}</h3>
+
+        {!chosenFolder && (
+          <NotesSearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder={
+              language === 'pl'
+                ? 'Szukaj po tytule lub opisie...'
+                : 'Search by title or description...'
+            }
+          />
+        )}
 
         <div className="popup-content">
           {loading ? (
@@ -139,16 +183,20 @@ const MusicPopup = ({isShowMusicPopupShown, hideMusicPopup, language}) => {
             <NotesFolder
               setFolder={setChosenFolder}
               chosenFolder={chosenFolder}
-              isShowMusicPopupShown={isShowMusicPopupShown}
-              hideMusicPopup={hideMusicPopup}
               language={language}
+              initialExpandedGroupId={expandedGroupId}
+            />
+          ) : hasSearch ? (
+            <SearchResults
+              results={searchResults}
+              language={language}
+              onNavigateCategory={handleNavigateToCategory}
+              onNavigateGroup={handleNavigateToGroup}
             />
           ) : (
             <ListOfFolders
               folders={data}
               setFolder={setChosenFolder}
-              isShowMusicPopupShown={isShowMusicPopupShown}
-              hideMusicPopup={hideMusicPopup}
               language={language}
             />
           )}

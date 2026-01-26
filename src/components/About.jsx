@@ -49,7 +49,18 @@ const About = ({appData, language}) => {
 
   const staticData = appData?.bioStatic?.items?.[0] || {}
 
-  const photoStyle = staticData?.bioPhoto?.url ? { backgroundImage: `url(${staticData?.bioPhoto.url})` } : {}
+  // const photoStyle = staticData?.bioPhoto?.url ? { backgroundImage: `url(${staticData?.bioPhoto.url})` } : {}
+  const hasPhoto = Boolean(staticData?.bioPhoto?.url)
+  const desktopPosition = staticData?.backgroundPosition || '50% 50%'
+  const mobilePosition = staticData?.backgroundPositionMobile || desktopPosition
+
+  const photoStyle = hasPhoto
+    ? {
+      backgroundImage: `url(${staticData.bioPhoto.url})`,
+      '--bg-pos-bio': desktopPosition,
+      '--bg-pos-bio-mobile': mobilePosition,
+    }
+    : {}
 
   return (
     <Element name="zyciorys">

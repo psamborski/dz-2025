@@ -18,7 +18,18 @@ export default function Contact({ appData, language }) {
   const fbLinks = useMemo(() => (staticData.facebookLink || '').split(';'), [staticData.facebookLink])
   const fbTrans = useMemo(() => (t.facebookTitle || '').split(';'), [t.facebookTitle])
 
-  const photoStyle = staticData?.contactPhoto?.url ? { backgroundImage: `url(${staticData.contactPhoto.url})` } : {}
+  // const photoStyle = staticData?.contactPhoto?.url ? { backgroundImage: `url(${staticData.contactPhoto.url})` } : {}
+  const hasPhoto = Boolean(staticData?.contactPhoto?.url)
+  const desktopPosition = staticData?.backgroundPosition || '50% 50%'
+  const mobilePosition = staticData?.backgroundPositionMobile || desktopPosition
+
+  const photoStyle = hasPhoto
+    ? {
+      backgroundImage: `url(${staticData.contactPhoto.url})`,
+      '--bg-pos-contact': desktopPosition,
+      '--bg-pos-contact-mobile': mobilePosition,
+    }
+    : {}
 
   return (
     <Element name="kontakt">

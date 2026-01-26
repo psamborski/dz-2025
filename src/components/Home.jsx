@@ -22,8 +22,18 @@ export default function Home({appData, language, showBioPopup}) {
     ['.docx', '.doc'].some(ext => file?.url?.toLowerCase().endsWith(ext))
   )
 
-  const photoStyle = staticData?.homePhoto?.url ? { backgroundImage: `url(${staticData.homePhoto?.url})` } : {}
+  // const photoStyle = staticData?.homePhoto?.url ? { backgroundImage: `url(${staticData.homePhoto?.url})` } : {}
+  const hasPhoto = Boolean(staticData?.homePhoto?.url)
+  const desktopPosition = staticData?.backgroundPosition || '50% 50%'
+  const mobilePosition = staticData?.backgroundPositionMobile || desktopPosition
 
+  const photoStyle = hasPhoto
+    ? {
+      backgroundImage: `url(${staticData.homePhoto.url})`,
+      '--bg-pos-home': desktopPosition,
+      '--bg-pos-home-mobile': mobilePosition,
+    }
+    : {}
   return (
     <Element name="home">
       <section id="home" ref={sectionRef}>

@@ -48,6 +48,8 @@ export const useAppData = () => {
             description
             contentType
           }
+          backgroundPosition
+          backgroundPositionMobile
         }
       }
       
@@ -95,6 +97,8 @@ export const useAppData = () => {
             description
             contentType
           }
+          backgroundPosition
+          backgroundPositionMobile
         }
       }
 
@@ -126,6 +130,8 @@ export const useAppData = () => {
             description
             contentType
           }
+          backgroundPosition
+          backgroundPositionMobile
         }
       }
 

@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import { MUSIC_SERVICES } from '../config.js'
+import { detectMusicService } from '../utils.js'
 
 const NotesFolder = ({
                        setFolder,
@@ -113,7 +115,7 @@ const NotesFolder = ({
                 const name = noteContent.name ?? ''
                 const description = noteContent.description?.json ?? null
                 const fileLink = note?.file || null
-                const optionalLink = note?.link || null
+                const optionalLinks = Array.isArray(note?.links) ? note.links : []
 
                 return (
                   <div className="notes-box" key={note.id}>
@@ -127,16 +129,27 @@ const NotesFolder = ({
                     </div>
 
                     <div className="notes-download-container">
-                      {optionalLink && (
-                        <a
-                          href={optionalLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="notes-external-link"
-                          title={optionalLink}
-                        >
-                          <span className="fas fa-link" />
-                        </a>
+                      {optionalLinks.length > 0 && (
+                        <div className="notes-external-links">
+                          {optionalLinks.map((link, index) => {
+                            const service = detectMusicService(link)
+                            const iconClass = MUSIC_SERVICES[service].icon
+                            const label = MUSIC_SERVICES[service].label
+
+                            return (
+                              <a
+                                key={`${note.id}-link-${index}`}
+                                href={link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`notes-external-link notes-external-link--${service}`}
+                                title={label}
+                              >
+                                <span className={iconClass} />
+                              </a>
+                            )
+                          })}
+                        </div>
                       )}
 
                       {fileLink && (

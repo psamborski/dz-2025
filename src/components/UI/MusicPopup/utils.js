@@ -51,3 +51,75 @@ export const extractPlainTextFromRichText = richText => {
 
   return walk(richText).toLowerCase()
 }
+
+export const detectMusicService = url => {
+  if (!url || typeof url !== 'string') return 'external'
+
+  const normalizedUrl = url.toLowerCase()
+
+  // YouTube (all common variants)
+  if (
+    normalizedUrl.includes('youtube.com') ||
+    normalizedUrl.includes('youtu.be') ||
+    normalizedUrl.includes('youtube-nocookie.com') ||
+    normalizedUrl.includes('music.youtube.com')
+  ) {
+    return 'youtube'
+  }
+
+  // Spotify (including short links)
+  if (
+    normalizedUrl.includes('spotify.com') ||
+    normalizedUrl.includes('spotify.link')
+  ) {
+    return 'spotify'
+  }
+
+  // Apple Music / iTunes
+  if (
+    normalizedUrl.includes('music.apple.com') ||
+    normalizedUrl.includes('itunes.apple.com')
+  ) {
+    return 'apple'
+  }
+
+  // SoundCloud
+  if (normalizedUrl.includes('soundcloud.com')) {
+    return 'soundcloud'
+  }
+
+  // Bandcamp
+  if (normalizedUrl.includes('bandcamp.com')) {
+    return 'bandcamp'
+  }
+
+  // Deezer
+  if (normalizedUrl.includes('deezer.com')) {
+    return 'deezer'
+  }
+
+  // Tidal
+  if (normalizedUrl.includes('tidal.com')) {
+    return 'tidal'
+  }
+
+  // Amazon Music
+  if (
+    normalizedUrl.includes('music.amazon.') ||
+    normalizedUrl.includes('amazon.com')
+  ) {
+    return 'amazon'
+  }
+
+  // Vimeo (video performances)
+  if (normalizedUrl.includes('vimeo.com')) {
+    return 'vimeo'
+  }
+
+  // Mixcloud
+  if (normalizedUrl.includes('mixcloud.com')) {
+    return 'mixcloud'
+  }
+
+  return 'external'
+}

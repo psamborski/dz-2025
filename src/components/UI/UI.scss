@@ -200,7 +200,7 @@ nav {
       }
 
       &.hidden-menu {
-        left: -100%;
+        left: -108%;
       }
 
       a {
@@ -401,6 +401,11 @@ nav {
           justify-content: center;
           margin: 1.25em 0 1.7em;
 
+          @media only screen and (max-width: 1000px) {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+
           .notes-desc-container {
             flex-grow: 2;
 
@@ -416,8 +421,111 @@ nav {
             display: flex;
             gap: .5rem;
 
+            @media only screen and (max-width: 1000px) {
+              margin-left: 0;
+              width: 100%;
+              padding: 0;
+              justify-content: space-between;
+            }
+
             a {
               font-size: 1.6em;
+            }
+
+            .notes-file-download {
+              margin-left: .6em;
+              position: relative;
+              top: -1px;
+            }
+
+            .notes-external-links {
+              display: flex;
+              gap: 0.5rem;
+            }
+
+            /* YouTube */
+            .notes-external-link--youtube:hover {
+              color: #ff0000;
+            }
+
+            /* Spotify */
+            .notes-external-link--spotify {
+              font-size: 1.5em;
+
+              &:hover {
+                color: #1db954;
+              }
+            }
+
+            /* Apple Music */
+            .notes-external-link--apple {
+              position: relative;
+              top: -3px;
+              width: .85em;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              text-decoration: none;
+
+              &:hover {
+                color: #fa243c;
+              }
+            }
+
+            /* SoundCloud */
+            .notes-external-link--soundcloud {
+              font-size: 1.5em;
+              &:hover {color: #ff5500;}
+            }
+
+            /* Bandcamp */
+            .notes-external-link--bandcamp {
+              font-size: 1.5em;
+              &:hover {color: #1da0c3;}
+            }
+
+            /* Deezer */
+            .notes-external-link--deezer {
+              font-size: 1.5em;
+              &:hover {
+                color: #ef5466;
+              }
+            }
+
+            /* Tidal (no official FA icon – neutral but premium) */
+            .notes-external-link--tidal {
+              font-size: 1.5em;
+              &:hover {color: #000000;}
+            }
+
+            /* Amazon Music */
+            .notes-external-link--amazon {
+              position: relative;
+              top: -1px;
+              width: .8em;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              text-decoration: none;
+
+              &:hover {
+                color: #ff9900;
+              }
+            }
+
+            /* Vimeo */
+            .notes-external-link--vimeo:hover {
+              color: #1ab7ea;
+            }
+
+            /* Mixcloud */
+            .notes-external-link--mixcloud:hover {
+              color: #5000ff;
+            }
+
+            /* External / fallback */
+            .notes-external-link--external:hover {
+              color: #6c757d;
             }
           }
         }

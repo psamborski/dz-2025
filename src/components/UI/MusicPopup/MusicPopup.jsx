@@ -75,7 +75,7 @@ const MusicPopup = ({ isShowMusicPopupShown, hideMusicPopup, language }) => {
               return {
                 id: plNote.sys.id,
                 file: plNote.notesFile?.url,
-                link: plNote.notesOptionalLink,
+                links: plNote.notesOptionalLinks,
                 pl: {
                   name: plNote.notesTitle,
                   description: plNote.notesDesc || null

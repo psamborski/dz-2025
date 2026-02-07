@@ -46,7 +46,7 @@ export const useNotesData = () => {
           sys { id }
           notesTitle
           notesDesc { json }
-          notesOptionalLink
+          notesOptionalLinks
           notesFile {
             url
             title
@@ -69,7 +69,7 @@ export const useNotesData = () => {
           sys { id }
           notesTitle
           notesDesc { json }
-          notesOptionalLink
+          notesOptionalLinks
           notesFile {
             url
             title

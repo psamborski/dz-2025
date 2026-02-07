@@ -14,12 +14,22 @@ export const searchNotes = (categories, query, language) => {
             ? langData.name.toLowerCase()
             : ''
 
+        const subtitle =
+          typeof langData.subtitle === 'string'
+            ? langData.subtitle.toLowerCase()
+            : ''
+
         const descriptionText =
           typeof langData.description === 'string'
             ? langData.description.toLowerCase()
             : extractPlainTextFromRichText(langData.description?.json)
 
-        if (title.includes(q) || descriptionText.includes(q)) {
+        // search in title, subtitle and description
+        if (
+          title.includes(q) ||
+          subtitle.includes(q) ||
+          descriptionText.includes(q)
+        ) {
           results.push({
             note,
             category: {

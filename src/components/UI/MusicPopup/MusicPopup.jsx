@@ -78,10 +78,12 @@ const MusicPopup = ({ isShowMusicPopupShown, hideMusicPopup, language }) => {
                 links: plNote.notesOptionalLinks,
                 pl: {
                   name: plNote.notesTitle,
+                  subtitle: plNote.notesSubtitle,
                   description: plNote.notesDesc || null
                 },
                 en: {
                   name: matchEnNote?.notesTitle || plNote.notesTitle,
+                  subtitle: matchEnNote?.notesSubtitle || plNote.notesSubtitle,
                   description: matchEnNote?.notesDesc || null
                 }
               }

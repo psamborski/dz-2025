@@ -409,9 +409,24 @@ nav {
           .notes-desc-container {
             flex-grow: 2;
 
-            div {
+            .notes-title {
+              margin: 0;
+              font-size: 1.6em;
+              font-weight: 600;
+              line-height: 1.2;
+            }
+
+            .notes-subtitle {
+              margin-top: 0.25em;
+              font-size: 1.34em;
+              font-weight: 400;
+              opacity: 0.75;
+              line-height: 1.3;
+            }
+
+            .notes-description {
               font-size: 1.43em;
-              margin: .45em 0 0 0;
+              margin: 1.2em 0 0 0;
             }
           }
 

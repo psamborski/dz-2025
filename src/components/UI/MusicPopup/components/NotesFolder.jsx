@@ -113,6 +113,7 @@ const NotesFolder = ({
               {notesList.map(note => {
                 const noteContent = note?.[language] ?? {}
                 const name = noteContent.name ?? ''
+                const subtitle = noteContent.subtitle ?? ''
                 const description = noteContent.description?.json ?? null
                 const fileLink = note?.file || null
                 const optionalLinks = Array.isArray(note?.links) ? note.links : []
@@ -121,6 +122,11 @@ const NotesFolder = ({
                   <div className="notes-box" key={note.id}>
                     <div className="notes-desc-container">
                       <h5>{name}</h5>
+                      {subtitle && (
+                        <div className="notes-subtitle">
+                          {subtitle}
+                        </div>
+                      )}
                       {description && (
                         <div className="notes-description">
                           {documentToReactComponents(description)}

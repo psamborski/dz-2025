@@ -65,6 +65,29 @@ const NotesFolder = ({
 
       {groups.map(group => {
         const notesList = group?.notes ?? []
+
+        // SORTING by subtitle and title
+        const sortedNotes = notesList.slice().sort((a, b) => {
+          const noteA = a?.[language] ?? {}
+          const noteB = b?.[language] ?? {}
+
+          const subtitleA = noteA.subtitle ?? ''
+          const subtitleB = noteB.subtitle ?? ''
+
+          // 1. notes with no subtitle go to the end
+          if (!subtitleA && subtitleB) return 1
+          if (subtitleA && !subtitleB) return -1
+
+          // 2. if both have subtitle -> sort by subtitle
+          const subtitleCompare = subtitleA.localeCompare(subtitleB, undefined, { sensitivity: 'base' })
+          if (subtitleCompare !== 0) return subtitleCompare
+
+          // 3. if same subtitle (or empty), sort by title
+          const titleA = noteA.name ?? ''
+          const titleB = noteB.name ?? ''
+          return titleA.localeCompare(titleB, undefined, { sensitivity: 'base' })
+        })
+
         const groupName =
           language === 'pl'
             ? group?.pl || 'Grupa nut'
@@ -87,15 +110,15 @@ const NotesFolder = ({
                 gap: '0.5rem'
               }}
             >
-              <span
-                className={clsx(
-                  'notes-group-header-icon',
-                  'fas',
-                  isExpanded
-                    ? 'fa-chevron-right rotated'
-                    : 'fa-chevron-right'
-                )}
-              />
+            <span
+              className={clsx(
+                'notes-group-header-icon',
+                'fas',
+                isExpanded
+                  ? 'fa-chevron-right rotated'
+                  : 'fa-chevron-right'
+              )}
+            />
               {groupName}
             </h4>
 
@@ -110,7 +133,7 @@ const NotesFolder = ({
                   : 0
               }}
             >
-              {notesList.map(note => {
+              {sortedNotes.map(note => {
                 const noteContent = note?.[language] ?? {}
                 const name = noteContent.name ?? ''
                 const subtitle = noteContent.subtitle ?? ''
@@ -122,11 +145,7 @@ const NotesFolder = ({
                   <div className="notes-box" key={note.id}>
                     <div className="notes-desc-container">
                       <h5>{name}</h5>
-                      {subtitle && (
-                        <div className="notes-subtitle">
-                          {subtitle}
-                        </div>
-                      )}
+                      {subtitle && <div className="notes-subtitle">{subtitle}</div>}
                       {description && (
                         <div className="notes-description">
                           {documentToReactComponents(description)}

@@ -15,6 +15,7 @@ const SearchResults = ({ results, language, onNavigateCategory, onNavigateGroup 
             <div className="notes-box" key={note.id}>
               <div className="notes-desc-container">
                 <h5>{content.name}</h5>
+                {content.subtitle && <div className="notes-subtitle">{content.subtitle}</div>}
 
                 {content.description?.json && (
                   <div className="notes-description">
